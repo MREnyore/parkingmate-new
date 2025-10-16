@@ -1,0 +1,67 @@
+
+n npm install
+> parkingmate-monorepo@1.0.0 prepare
+> husky
+added 26 packages, and audited 27 packages in 8s
+7 packages are looking for funding
+  run `npm fund` for details
+found 0 vulnerabilities
+> parkingmate-monorepo@1.0.0 build
+> pnpm build:api && pnpm build:ui
+'pnpm' is not recognized as an internal or external command,
+operable program or batch file.
+> parkingmate-monorepo@1.0.0 test
+> dotnet test
+  Determining projects to restore...
+  Restored D:\a\parkingmate-new\parkingmate-new\ParkingMate.ServiceModel\ParkingMate.ServiceModel.csproj (in 1.14 sec).
+  Restored D:\a\parkingmate-new\parkingmate-new\ParkingMate.ServiceInterface\ParkingMate.ServiceInterface.csproj (in 31.37 sec).
+  Restored D:\a\parkingmate-new\parkingmate-new\ParkingMate.Tests\ParkingMate.Tests.csproj (in 31.37 sec).
+  Restored D:\a\parkingmate-new\parkingmate-new\ParkingMate\ParkingMate.csproj (in 31.37 sec).
+  ParkingMate.ServiceModel -> D:\a\parkingmate-new\parkingmate-new\ParkingMate.ServiceModel\bin\Debug\net9.0\ParkingMate.ServiceModel.dll
+D:\a\parkingmate-new\parkingmate-new\ParkingMate.ServiceInterface\DataHubServices.cs(130,32): warning CS8601: Possible null reference assignment. [D:\a\parkingmate-new\parkingmate-new\ParkingMate.ServiceInterface\ParkingMate.ServiceInterface.csproj]
+  ParkingMate.ServiceInterface -> D:\a\parkingmate-new\parkingmate-new\ParkingMate.ServiceInterface\bin\Debug\net9.0\ParkingMate.ServiceInterface.dll
+  ParkingMate.Tests -> D:\a\parkingmate-new\parkingmate-new\ParkingMate.Tests\bin\Debug\net9.0\ParkingMate.Tests.dll
+Test run for D:\a\parkingmate-new\parkingmate-new\ParkingMate.Tests\bin\Debug\net9.0\ParkingMate.Tests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 17.14.1 (x64)
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Setup failed for test fixture ParkingMate.Tests.IntegrationTest
+ServiceStack.LicenseException : The free-quota limit on '10 ServiceStack Operations' has been reached. Please see https://servicestack.net to upgrade to a commercial license or visit https://github.com/ServiceStackV3/ServiceStackV3 to revert back to the free ServiceStack v3.
+StackTrace:    at ServiceStack.LicenseUtils.ApprovedUsage(Int32 allowedUsage, Int32 actualUsage, String message) in /home/runner/work/ServiceStack/ServiceStack/ServiceStack.Text/src/ServiceStack.Text/LicenseUtils.cs:line 494
+   at ServiceStack.LicenseUtils.AssertValidUsage(LicenseFeature feature, QuotaType quotaType, Int32 count) in /home/runner/work/ServiceStack/ServiceStack/ServiceStack.Text/src/ServiceStack.Text/LicenseUtils.cs:line 561
+   at ServiceStack.Host.ServiceMetadata.Add(Type serviceType, Type requestType, Type responseType) in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack/Host/ServiceMetadata.cs:line 121
+   at ServiceStack.Host.ServiceController.RegisterService(ITypeFactory serviceFactoryFn, Type serviceType) in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack/Host/ServiceController.cs:line 180
+   at ServiceStack.Host.ServiceController.Register(ITypeFactory serviceFactoryFn) in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack/Host/ServiceController.cs:line 137
+   at ServiceStack.Host.ServiceController.Init() in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack/Host/ServiceController.cs:line 71
+   at ServiceStack.ServiceStackHost.Init() in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack/ServiceStackHost.cs:line 309
+   at ServiceStack.AppSelfHostBase.RealInit() in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack.Kestrel/AppSelfHostBase.cs:line 206
+   at ServiceStack.AppSelfHostBase.Startup.Configure(IApplicationBuilder app, IWebHostEnvironment env) in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack.Kestrel/AppSelfHostBase.cs:line 285
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureBuilder.Invoke(Object instance, IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.WebHost.BuildApplication()
+   at Microsoft.AspNetCore.Hosting.WebHost.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.WebHost.Start()
+   at ServiceStack.AppSelfHostBase.Start(String[] urlBases) in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack.Kestrel/AppSelfHostBase.cs:line 237
+   at ServiceStack.AppSelfHostBase.Start(String urlBase) in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack.Kestrel/AppSelfHostBase.cs:line 229
+   at ParkingMate.Tests.IntegrationTest..ctor() in D:\a\parkingmate-new\parkingmate-new\ParkingMate.Tests\IntegrationTest.cs:line 25
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Setup failed for test fixture ParkingMate.Tests.UnitTest
+System.IO.InvalidDataException : ServiceStackHost.Instance has already been set (AppHost)
+StackTrace:    at ServiceStack.ServiceStackHost.Init() in /home/runner/work/ServiceStack/ServiceStack/ServiceStack/src/ServiceStack/ServiceStackHost.cs:line 260
+   at ParkingMate.Tests.UnitTest..ctor() in D:\a\parkingmate-new\parkingmate-new\ParkingMate.Tests\UnitTest.cs:line 15
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Can_call_Auth_Service [714 ms]
+  Error Message:
+   OneTimeSetUp: ServiceStack.LicenseException : The free-quota limit on '10 ServiceStack Operations' has been reached. Please see https://servicestack.net to upgrade to a commercial license or visit https://github.com/ServiceStackV3/ServiceStackV3 to revert back to the free ServiceStack v3.
+  Failed Can_resolve_AuthServices [2 ms]
+  Error Message:
+   OneTimeSetUp: System.IO.InvalidDataException : ServiceStackHost.Instance has already been set (AppHost)
+Failed!  - Failed:     2, Passed:     2, Skipped:     0, Total:     4, Duration: 807 ms - ParkingMate.Tests.dll (net9.0)
+Workload updates are available. Run `dotnet workload list` for more information.
+Error: Process completed with exit code 1.

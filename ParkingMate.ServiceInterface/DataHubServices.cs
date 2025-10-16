@@ -127,7 +127,7 @@ public class DataHubServices : Service
             var newGuest = new Guest
             {
                 OrgId = cameraEvent.OrgId,
-                LicensePlate = cameraEvent.LicensePlate,
+                LicensePlate = cameraEvent.LicensePlate!,
                 CameraEventId = cameraEvent.EventId,
                 Status = GuestStatus.PendingConfirmation,
                 ExpiresAt = DateTime.UtcNow.AddMinutes(30), // 30 minutes to confirm

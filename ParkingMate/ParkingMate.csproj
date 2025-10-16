@@ -18,11 +18,11 @@
 
   <ItemGroup>
     <PackageReference Include="SendGrid" Version="9.29.3" />
-    <PackageReference Include="ServiceStack" Version="6.*" />
-    <PackageReference Include="ServiceStack.Extensions" Version="6.*" />
-    <PackageReference Include="ServiceStack.OrmLite.PostgreSQL" Version="8.8.0" />
-    <PackageReference Include="ServiceStack.Server" Version="6.*" />
-    <PackageReference Include="ServiceStack.Api.OpenApi" Version="6.*" />
+    <PackageReference Include="ServiceStack" Version="5.*" />
+    <PackageReference Include="ServiceStack.Extensions" Version="5.*" />
+    <PackageReference Include="ServiceStack.OrmLite.PostgreSQL" Version="5.*" />
+    <PackageReference Include="ServiceStack.Server" Version="5.*" />
+    <PackageReference Include="ServiceStack.Api.OpenApi" Version="5.*" />
   </ItemGroup>
 
   <ItemGroup>
