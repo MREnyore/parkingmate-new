@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      SERVICESTACK_LICENSE: TRIAL30WEB-e3JlZfpUUklBTDMwV0VCLG5hbWU6OS8yNy8yMDI1IGE1ZDBjNWJiZjNiMTQ1OWM5MTU5ZWZkZjYyNmYwOGVmLHR5cGU6VHJpYWwsbWV0YTowLGhhc2g6YTdLb1dJOWhGeksyekR6cnUrMC82dEJJczNscDkzSUZCclI5M1NzTjlaRDdnS3dFNG92REk5c01ick1xQUVZdS8xZ3dSTWh4ZWQzZlkzZUJ6eUcwQXNUMkhTYzJNMHNUb2dNZTNKdzlLbFFpdmkvY3BUd0ZyaHR1REQ1QjRtc1JCeTlFSi9HMzFidGNRQnVqa1hLdmxuY1dMM3h0L0ZYbldObFhQUTZnK01NPSxleHBpcnk6MjAyNS0xMC0yN30=
     permissions:
       contents: read #This is required for actions/checkout
 
