@@ -1,0 +1,92 @@
+### Test ValidateAccessToken Endpoint
+### This file tests the token validation functionality
+### 
+### BEST PRACTICE: Use Authorization header for JWT tokens (Steps 3-6)
+### BACKWARD COMPATIBILITY: Request body still supported (Steps 7-8)
+
+### Step 1: First get a fresh token by signing in
+POST https://localhost:5001/auth/customer-authenticate
+Content-Type: application/json
+
+{
+  "email": "vlad.crishan20@gmail.com"
+}
+
+###
+
+### Step 2: Verify OTP to get a fresh access token
+POST https://localhost:5001/auth/verify-otp
+Content-Type: application/json
+
+{
+  "email": "vlad.crishan20@gmail.com",
+  "code": "REPLACE_WITH_OTP_FROM_EMAIL"
+}
+
+### Copy the accessToken from the response above and use it in the test below
+
+###
+
+### Step 3: Test ValidateAccessToken with Authorization header (RECOMMENDED)
+POST https://localhost:5001/auth/validate-auth-token
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTkwNTQxODgsImV4cCI6MTc2MDI2Mzc4OCwiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiVmxhZCIsImZhbWlseV9uYW1lIjoyLCJuYW1lIjoiVmxhZCAyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6Mn0.EQUI1Zm_SEpJvim12RZgaQ0z75QmlGyCkC0itKIUFBQ
+Accept: application/json
+Content-Type: application/json
+
+{}
+
+###
+
+### Step 4: Test ValidateAccessToken with Authorization header (no Bearer prefix)
+POST https://localhost:5001/auth/validate-auth-token
+Authorization: REPLACE_WITH_FRESH_ACCESS_TOKEN
+Content-Type: application/json
+
+{}
+
+###
+
+### Step 5: Test ValidateAccessToken with invalid token in Authorization header
+POST https://localhost:5001/auth/validate-auth-token
+Authorization: Bearer invalid.token.here
+Content-Type: application/json
+
+{}
+
+###
+
+### Step 6: Test ValidateAccessToken with missing token (should fail)
+POST https://localhost:5001/auth/validate-auth-token
+Content-Type: application/json
+
+{}
+
+###
+
+### Step 7: Test ValidateAccessToken with request body (backward compatibility)
+POST https://localhost:5001/auth/validate-auth-token
+Content-Type: application/json
+
+{
+  "accessToken": "REPLACE_WITH_FRESH_ACCESS_TOKEN"
+}
+
+###
+
+### Step 8: Test ValidateAccessToken with Bearer prefix in request body (backward compatibility)
+POST https://localhost:5001/auth/validate-auth-token
+Content-Type: application/json
+
+{
+  "accessToken": "Bearer REPLACE_WITH_FRESH_ACCESS_TOKEN"
+}
+
+###
+
+### Expected Response for valid tokens:
+### {
+###   "isValid": true,
+###   "expiresAt": "/Date(1760194266000-0000)/",
+###   "customerId": "57f0deab-61df-4172-a474-1bcdc07cb846",
+###   "email": "vlad.crishan20@gmail.com"
+### }

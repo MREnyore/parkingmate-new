@@ -1,0 +1,39 @@
+### Get User Profile
+GET {{baseUrl}}/api/user/profile
+Authorization: Bearer {{authToken}}
+
+### Update User Profile
+PUT {{baseUrl}}/api/user/profile
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe"
+}
+
+### Change Password
+PUT {{baseUrl}}/api/user/password
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "currentPassword": "currentpass123",
+  "newPassword": "newpass123"
+}
+
+### Upload Profile Picture
+POST {{baseUrl}}/api/user/profile-picture
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="profile.jpg"
+Content-Type: image/jpeg
+
+< ./profile.jpg
+--boundary--
+
+### Delete Profile Picture
+DELETE {{baseUrl}}/api/user/profile-picture
+Authorization: Bearer {{authToken}}

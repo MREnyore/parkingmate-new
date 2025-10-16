@@ -1,0 +1,134 @@
+### Refresh Token Authentication Flow Tests
+### This demonstrates the complete refresh token authentication flow
+
+### Step 1: Customer Authenticate (Get OTP)
+POST https://localhost:5001/auth/customer-authenticate
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "vlad.crishan20@gmail.com"
+}
+
+###
+
+### Step 2: Verify OTP (Get Access + Refresh Tokens)
+POST https://localhost:5001/auth/verify-otp
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "vlad.crishan20@gmail.com",
+  "code": "123456"
+}
+
+# Response will include:
+# - accessToken (short-lived, 30 minutes)
+# - refreshToken (long-lived, 30 days)
+# - accessTokenExpiresAt
+# - refreshTokenExpiresAt
+
+###
+
+### Step 3: Use Access Token for API Calls
+GET https://localhost:5001/customer/info
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+Accept: application/json
+Content-Type: application/json
+
+###
+
+### Step 4: Refresh Access Token (when it expires)
+POST https://localhost:5001/auth/refresh-token
+Accept: application/json
+Content-Type: application/json
+
+{
+  "token": "YOUR_REFRESH_TOKEN_HERE"
+}
+
+# Response will include:
+# - New accessToken
+# - New refreshToken (old one is revoked)
+# - New expiration times
+
+###
+
+### Step 5: Validate Access Token
+POST https://localhost:5001/auth/validate-auth-token
+Accept: application/json
+Content-Type: application/json
+
+{
+  "accessToken": "Bearer YOUR_ACCESS_TOKEN_HERE"
+}
+
+# Response will include:
+# - isValid: true/false
+# - customerId
+# - email
+# - expiresAt
+
+###
+
+### Step 6: Logout (Revoke Refresh Token)
+POST https://localhost:5001/auth/customer/logout
+Accept: application/json
+Content-Type: application/json
+
+{
+  "refreshToken": "YOUR_REFRESH_TOKEN_HERE"
+}
+
+###
+
+### Example: Complete Flow with Real Tokens
+### After getting tokens from Step 2, use them here:
+
+### Test with Access Token
+GET https://localhost:5001/customer/info
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiI...
+Accept: application/json
+
+###
+
+### Refresh when Access Token expires
+POST https://localhost:5001/auth/refresh-token
+Accept: application/json
+Content-Type: application/json
+
+{
+  "token": "base64-encoded-refresh-token-here"
+}
+
+###
+
+### Validate Token
+POST https://localhost:5001/auth/validate-auth-token
+Accept: application/json
+Content-Type: application/json
+
+{
+  "accessToken": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiI..."
+}
+
+###
+
+### Logout and Revoke
+POST https://localhost:5001/auth/customer/logout
+Accept: application/json
+Content-Type: application/json
+
+{
+  "refreshToken": "base64-encoded-refresh-token-here"
+}
+
+###
+
+### Security Features Demonstrated:
+# 1. Short-lived access tokens (30 minutes)
+# 2. Long-lived refresh tokens (30 days) 
+# 3. Automatic token rotation on refresh
+# 4. Token revocation on logout
+# 5. Device and IP tracking
+# 6. Token validation endpoint

@@ -1,0 +1,82 @@
+### Customer CRUD API Tests
+### Make sure to first authenticate and get an auth token from the VerifyOtp endpoint
+
+### 1. Get Customer Information (includes cars)
+GET https://localhost:5001/customer/info
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTkwNTU1MTMsImV4cCI6MTc2MDI2NTExMywiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiVmxhZCIsImZhbWlseV9uYW1lIjoyLCJuYW1lIjoiVmxhZCAyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.ym91xkcsXog3xHe5O8y2mGIekau9lOIU9mIx8RJxWlQ
+Accept: application/json
+Content-Type: application/json
+
+###
+
+### 2. Update Customer Information
+PUT https://localhost:5001/customer/info
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTg5ODc3OTAsImV4cCI6MTc2MDE5NzM5MCwiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTGlzYSIsIm5hbWUiOiJMaXNhIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.JBKkiJWrsSaXyR0FQl3IxolMuDS4NSIRIp4sUHmP7Jg
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Vlad Crișan",
+  "city": "New City",
+  "address": "456 New St",
+  "postalCode": "67890",
+}
+
+###
+
+### 3. Add New Car
+POST https://localhost:5001/customer/cars
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTg5ODc3OTAsImV4cCI6MTc2MDE5NzM5MCwiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTGlzYSIsIm5hbWUiOiJMaXNhIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.JBKkiJWrsSaXyR0FQl3IxolMuDS4NSIRIp4sUHmP7Jg
+Accept: application/json
+Content-Type: application/json
+
+{
+  "licensePlate": "ABC123",
+  "brand": "BMW",
+  "model": "5"
+}
+
+###
+
+### 4. Update Car Information
+PUT https://localhost:5001/customer/cars/f54da7fe9e6c4edcbbd09bb7b9a47e6c
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTkwNTU1MTMsImV4cCI6MTc2MDI2NTExMywiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiVmxhZCIsImZhbWlseV9uYW1lIjoyLCJuYW1lIjoiVmxhZCAyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.ym91xkcsXog3xHe5O8y2mGIekau9lOIU9mIx8RJxWlQ
+Accept: application/json
+Content-Type: application/json
+
+{
+  "licensePlate": "M1234"
+}
+
+###
+
+### 5. Delete Car
+DELETE https://localhost:5001/customer/cars/ef6679ce4f0042acb6e176960a75d44a
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTkwNTU1MTMsImV4cCI6MTc2MDI2NTExMywiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiVmxhZCIsImZhbWlseV9uYW1lIjoyLCJuYW1lIjoiVmxhZCAyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.ym91xkcsXog3xHe5O8y2mGIekau9lOIU9mIx8RJxWlQ
+Accept: application/json
+
+###
+
+### Example: Complete authentication flow first
+### Step 1: Sign in to get OTP
+POST https://localhost:5001/auth/customer/signin
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "vlad.crishan20@gmail.com"
+}
+
+###
+
+### Step 2: Verify OTP to get auth token
+POST https://localhost:5001/auth/verify-otp
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "vlad.crishan20@gmail.com",
+  "code": "237873"
+}
+
+### Copy the authToken from the response above and use it in the Authorization header for the customer CRUD endpoints

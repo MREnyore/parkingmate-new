@@ -1,0 +1,26 @@
+### Test SendGrid Email Integration
+### First, seed the database to create test data
+POST {{host}}/admin/seed-db
+Content-Type: application/json
+
+{
+  "Force": true
+}
+
+### Test camera event that should trigger email notification
+### This should match the seeded license plate "M-AB1234"
+POST {{host}}/api/datahub/entry
+Content-Type: application/json
+
+{
+  "license_plate": "M-AB1234",
+  "timestamp": "2025-09-27T10:30:00",
+  "camera_id": "bc59221f-eb49-410f-9080-f2f4a9387525",
+  "location_name": "Main Parking Lot",
+  "image_base64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+  "confidence": 0.95,
+  "direction": "entry",
+  "event_id": "test-event-id-123"
+}
+
+@host = http://localhost:5000

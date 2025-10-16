@@ -1,0 +1,40 @@
+{
+  "name": "parkingmate-monorepo",
+  "version": "1.0.0",
+  "description": "ParkingMate - Full-stack parking management system with ALPR",
+  "private": true,
+  "scripts": {
+    "dev:api": "cd ParkingMate && dotnet watch",
+    "dev:ui": "cd ParkingMate.Client && pnpm dev",
+    "dev": "concurrently \"pnpm dev:api\" \"pnpm dev:ui\" --names \"API,UI\" --prefix-colors \"blue,green\"",
+    "build:api": "dotnet build",
+    "build:ui": "cd ParkingMate.Client && pnpm build",
+    "build": "pnpm build:api && pnpm build:ui",
+    "test": "dotnet test",
+    "dtos": "cd ParkingMate && x mjs",
+    "seed-db": "curl -X POST http://localhost:5000/admin/seed-db -H \"Content-Type: application/json\" -d \"{}\"",
+    "seed-db-force": "curl -X POST http://localhost:5000/admin/seed-db -H \"Content-Type: application/json\" -d \"{\\\"Force\\\":true}\"",
+    "lint:ui": "cd ParkingMate.Client && pnpm lint",
+    "biome:fix": "cd ParkingMate.Client && pnpm biome:fix",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "husky": "^9.1.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tcktmt/parkingmate.git"
+  },
+  "keywords": [
+    "parking",
+    "alpr",
+    "servicestack",
+    "react",
+    "typescript",
+    "vite"
+  ],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@9.0.0"
+}

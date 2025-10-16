@@ -1,0 +1,73 @@
+### Test Missing Customer Attributes
+### This will help us debug why some attributes are missing from the response
+
+### Step 1: Get current customer info (to see what's missing)
+GET https://localhost:5001/customer/info
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTg5OTU0NjYsImV4cCI6MTc2MDIwNTA2NiwiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTGlzYSIsIm5hbWUiOiJMaXNhIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.dIo_yJBep4DMgxFh_iOFyTyoz70GUh8j2jZaJl5H_Uw
+Accept: application/json
+
+###
+
+### Step 2: Update customer with ALL new attributes
+PUT https://localhost:5001/customer/info
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTg5OTU0NjYsImV4cCI6MTc2MDIwNTA2NiwiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTGlzYSIsIm5hbWUiOiJMaXNhIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.dIo_yJBep4DMgxFh_iOFyTyoz70GUh8j2jZaJl5H_Uw
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Lisa Updated",
+  "phoneNumber": "+1-555-0123",
+  "membershipStatus": "premium",
+  "membershipExpiryDate": "2025-12-31T23:59:59Z",
+  "address": "123 Test Street, Apt 4B",
+  "postalCode": "12345",
+  "city": "Test City"
+}
+
+###
+
+### Step 3: Get customer info again (should now show all attributes)
+GET https://localhost:5001/customer/info
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTg5OTU0NjYsImV4cCI6MTc2MDIwNTA2NiwiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTGlzYSIsIm5hbWUiOiJMaXNhIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.dIo_yJBep4DMgxFh_iOFyTyoz70GUh8j2jZaJl5H_Uw
+Accept: application/json
+
+# This should now include:
+# - membershipStatus: "premium"
+# - membershipExpiryDate: "2025-12-31T23:59:59Z"
+# - address: "123 Test Street, Apt 4B"
+# - postalCode: "12345"
+# - city: "Test City"
+
+###
+
+### Step 4: Test partial update (only membership)
+PUT https://localhost:5001/customer/info
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTg5OTU0NjYsImV4cCI6MTc2MDIwNTA2NiwiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTGlzYSIsIm5hbWUiOiJMaXNhIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.dIo_yJBep4DMgxFh_iOFyTyoz70GUh8j2jZaJl5H_Uw
+Accept: application/json
+Content-Type: application/json
+
+{
+  "membershipStatus": "gold"
+}
+
+###
+
+### Step 5: Final check - get customer info
+GET https://localhost:5001/customer/info
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IlRYbCJ9.eyJzdWIiOiI1N2YwZGVhYi02MWRmLTQxNzItYTQ3NC0xYmNkYzA3Y2I4NDYiLCJpYXQiOjE3NTg5OTU0NjYsImV4cCI6MTc2MDIwNTA2NiwiZW1haWwiOiJ2bGFkLmNyaXNoYW4yMEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTGlzYSIsIm5hbWUiOiJMaXNhIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiY3VzdG9tZXI6dmxhZC5jcmlzaGFuMjBAZ21haWwuY29tIiwicm9sZXMiOlsiQ3VzdG9tZXIiXSwicGVybXMiOlsiY3VzdG9tZXI6YWNjZXNzIl0sImp0aSI6MX0.dIo_yJBep4DMgxFh_iOFyTyoz70GUh8j2jZaJl5H_Uw
+Accept: application/json
+
+# Should show:
+# - membershipStatus: "gold" (updated)
+# - membershipExpiryDate: "2025-12-31T23:59:59Z" (preserved)
+# - address: "123 Test Street, Apt 4B" (preserved)
+# - postalCode: "12345" (preserved)
+# - city: "Test City" (preserved)
+
+###
+
+### Expected Behavior:
+# 1. Initially, new attributes might be null/missing (ServiceStack excludes nulls by default)
+# 2. After Step 2 update, ALL new attributes should appear in response
+# 3. After Step 4 partial update, all attributes should still be present
+# 4. This confirms the database columns exist and the API is working correctly
