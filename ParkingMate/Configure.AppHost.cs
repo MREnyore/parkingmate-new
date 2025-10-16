@@ -15,6 +15,13 @@ public class AppHost() : AppHostBase("ParkingMate", typeof(ParkingMate.ServiceIn
 {
     public override void Configure(Container container)
     {
+        // Register ServiceStack license if provided
+        var licenseKey = Environment.GetEnvironmentVariable("SERVICESTACK_LICENSE");
+        if (!string.IsNullOrEmpty(licenseKey))
+        {
+            ServiceStack.LicenseUtils.RegisterLicense(licenseKey);
+        }
+
         // Configure ServiceStack, Run custom logic after ASP.NET Core Startup
         SetConfig(new HostConfig {
             AllowFileExtensions = { "png", "jpg", "jpeg" },
