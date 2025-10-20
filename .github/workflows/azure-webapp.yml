@@ -1,0 +1,53 @@
+name: Build and deploy Node.js app to Azure Web App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: parkingmate-prod
+  AZURE_WEBAPP_PACKAGE_PATH: 'dist'  # Update this if your build output is in a different directory
+  NODE_VERSION: '20.x'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm ci
+        
+    - name: Build application
+      run: |
+        npm run build
+      env:
+        CI: false
+
+    - name: Zip artifact for deployment
+      run: |
+        zip -r web-app.zip .
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: web-app.zip
+
+    - name: Upload artifact for deployment jobs
+      uses: actions/upload-artifact@v4
+      with:
+        name: node-app
+        path: ./
+        retention-days: 5

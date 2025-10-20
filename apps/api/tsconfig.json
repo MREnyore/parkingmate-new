@@ -1,0 +1,15 @@
+{
+  "extends": "@parkingmate/typescript-config/node.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": "./src",
+    "paths": {
+      "@/config/*": ["config/*"],
+      "@/routes/*": ["routes/*"],
+      "@/types/*": ["types/*"]
+    }
+  },
+  "include": ["src/**/*", "drizzle.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

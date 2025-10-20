@@ -1,0 +1,30 @@
+{
+  "name": "@parkingmate/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Type-safe API client generated from OpenAPI specification",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist src/generated",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check ./src",
+    "lint:fix": "biome check --write ./src",
+    "api:generate": "openapi-typescript ../../apps/api/openapi.yml -o src/generated/api.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.0.6",
+    "@parkingmate/typescript-config": "workspace:*",
+    "openapi-typescript": "^7.4.4",
+    "typescript": "~5.8.3"
+  }
+}

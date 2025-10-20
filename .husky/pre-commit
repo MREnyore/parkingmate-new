@@ -1,0 +1,3 @@
+pnpm lint:fix:staged
+pnpm api:generate
+pnpm build

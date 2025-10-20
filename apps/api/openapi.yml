@@ -1,0 +1,1377 @@
+openapi: 3.1.0
+info:
+  title: ParkingMate API
+  description: Backend API for ParkingMate parking management system
+  version: 1.0.0
+  contact:
+    name: ParkingMate Team
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Development server
+  - url: https://api.parkingmate.com/api/v1
+    description: Production server
+
+tags:
+  - name: auth
+    description: Authentication and authorization
+  - name: users
+    description: User management
+  - name: parking
+    description: Parking lot management
+  - name: bookings
+    description: Booking and reservation management
+  - name: payments
+    description: Payment processing
+  - name: default
+    description: Default endpoints
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for authenticated requests
+  schemas:
+    Error:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              example: VALIDATION_ERROR
+            message:
+              type: string
+              example: Validation failed
+            details:
+              type: object
+    SuccessResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          example: true
+
+    # Auth Schemas
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: admin@parkingmate.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: SecurePass123!
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 8
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+    AuthTokens:
+      type: object
+      required:
+        - accessToken
+        - refreshToken
+        - expiresIn
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        expiresIn:
+          type: integer
+        tokenType:
+          type: string
+          example: Bearer
+    LoginResponse:
+      allOf:
+        - $ref: "#/components/schemas/AuthTokens"
+        - type: object
+          properties:
+            user:
+              type: object
+              required:
+                - id
+                - email
+                - role
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                email:
+                  type: string
+                  format: email
+                role:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+
+    # User Schemas
+    User:
+      type: object
+      required:
+        - id
+        - orgId
+        - email
+        - firstName
+        - lastName
+        - role
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        orgId:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        address:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        role:
+          type: string
+          enum: [admin, customer]
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Customer:
+      type: object
+      required:
+        - id
+        - orgId
+        - email
+        - name
+        - role
+        - status
+        - cars
+      properties:
+        id:
+          type: string
+          format: uuid
+        orgId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phoneNumber:
+          type: string
+        registered:
+          type: boolean
+        status:
+          type: string
+        membershipStatus:
+          type: string
+          enum: [active, expired]
+        membershipExpiryDate:
+          type: string
+          format: date-time
+        address:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        cars:
+          type: array
+          items:
+            $ref: "#/components/schemas/Car"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Car:
+      type: object
+      required:
+        - id
+        - orgId
+        - licensePlate
+      properties:
+        id:
+          type: string
+          format: uuid
+        orgId:
+          type: string
+          format: uuid
+        licensePlate:
+          type: string
+        brand:
+          type: string
+        model:
+          type: string
+        label:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    # Parking Lot Schemas
+    ParkingLot:
+      type: object
+      required:
+        - id
+        - orgId
+        - name
+        - address
+        - city
+        - country
+      properties:
+        id:
+          type: string
+          format: uuid
+        orgId:
+          type: string
+        name:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CreateParkingLotRequest:
+      type: object
+      required:
+        - name
+        - address
+        - city
+        - country
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        address:
+          type: string
+          minLength: 1
+        city:
+          type: string
+          minLength: 1
+          maxLength: 100
+        country:
+          type: string
+          minLength: 1
+          maxLength: 100
+        update_at:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+
+paths:
+  # ============================================================================
+  # Auth Endpoints
+  # ============================================================================
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Admin login
+      description: Authenticate an admin user and receive access tokens
+      operationId: adminLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Admin registration
+      description: Register a new admin user
+      operationId: adminRegister
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /auth/logout:
+    post:
+      tags:
+        - auth
+      summary: Admin logout
+      description: Logout and invalidate admin session
+      operationId: adminLogout
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: Optional refresh token to revoke
+      responses:
+        "200":
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /auth/me:
+    get:
+      tags:
+        - auth
+      summary: Get current user
+      description: Get the currently authenticated user information
+      operationId: getCurrentUser
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User information retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /auth/register-customer:
+    post:
+      tags:
+        - auth
+      summary: Customer registration
+      description: Register a new customer and send OTP for verification
+      operationId: registerCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - registrationToken
+              properties:
+                registrationToken:
+                  type: string
+                  description: Registration token received via email
+      responses:
+        "200":
+          description: OTP sent successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          message:
+                            type: string
+                            example: OTP code sent to your email
+                          email:
+                            type: string
+                            format: email
+  /auth/customer/signin:
+    post:
+      tags:
+        - auth
+      summary: Customer signin
+      description: Initiate customer signin and send OTP
+      operationId: customerSignin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+      responses:
+        "200":
+          description: OTP sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /auth/verify-otp:
+    post:
+      tags:
+        - auth
+      summary: Verify OTP
+      description: Verify OTP code for customer authentication
+      operationId: verifyOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - otpCode
+              properties:
+                email:
+                  type: string
+                  format: email
+                otpCode:
+                  type: string
+      responses:
+        "200":
+          description: OTP verified successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/AuthTokens"
+  /auth/refresh-token:
+    post:
+      tags:
+        - auth
+      summary: Refresh access token
+      description: Refresh an expired access token using a refresh token
+      operationId: refreshToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refreshToken
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        "200":
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/AuthTokens"
+  /auth/customer/logout:
+    post:
+      tags:
+        - auth
+      summary: Customer logout
+      description: Logout and invalidate customer session
+      operationId: customerLogout
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: Optional refresh token to revoke
+      responses:
+        "200":
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /auth/validate-registration-token:
+    post:
+      tags:
+        - auth
+      summary: Validate registration token
+      description: Validate a registration token for customer registration
+      operationId: validateRegistrationToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+      responses:
+        "200":
+          description: Token validation result
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        required:
+                          - valid
+                        properties:
+                          valid:
+                            type: boolean
+                          customer:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                              email:
+                                type: string
+                                format: email
+                              name:
+                                type: string
+                              registered:
+                                type: boolean
+                          error:
+                            type: string
+
+  # ============================================================================
+  # User Management Endpoints
+  # ============================================================================
+  /customer/info:
+    get:
+      tags:
+        - users
+      summary: Get customer information
+      description: Retrieve the authenticated customer profile information
+      operationId: getCustomer
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Customer information retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Customer"
+    put:
+      tags:
+        - users
+      summary: Update customer information
+      description: Update the authenticated customer profile information
+      operationId: updateCustomer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  format: email
+      responses:
+        "200":
+          description: Customer information updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /customer/cars:
+    post:
+      tags:
+        - users
+      summary: Add customer car
+      description: Add a new car to the customer profile
+      operationId: addCar
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - licensePlate
+              properties:
+                licensePlate:
+                  type: string
+                brand:
+                  type: string
+                model:
+                  type: string
+                color:
+                  type: string
+      responses:
+        "201":
+          description: Car added successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Car"
+  /customer/cars/{carId}:
+    put:
+      tags:
+        - users
+      summary: Update customer car
+      description: Update an existing car in the customer profile
+      operationId: updateCar
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                licensePlate:
+                  type: string
+                brand:
+                  type: string
+                model:
+                  type: string
+                color:
+                  type: string
+      responses:
+        "200":
+          description: Car updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+    delete:
+      tags:
+        - users
+      summary: Delete customer car
+      description: Remove a car from the customer profile
+      operationId: deleteCar
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Car deleted successfully
+  /admin/profile:
+    get:
+      tags:
+        - users
+      summary: Get admin profile
+      description: Retrieve the authenticated admin user profile
+      operationId: getAdminProfile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Admin profile retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/User"
+    put:
+      tags:
+        - users
+      summary: Update admin profile
+      description: Update the authenticated admin user profile
+      operationId: updateAdminProfile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  format: email
+      responses:
+        "200":
+          description: Admin profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /admin/profile/change-password:
+    post:
+      tags:
+        - users
+      summary: Change admin password
+      description: Change the password for the authenticated admin user
+      operationId: changeAdminPassword
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - currentPassword
+                - newPassword
+              properties:
+                currentPassword:
+                  type: string
+                  format: password
+                newPassword:
+                  type: string
+                  format: password
+                  minLength: 8
+      responses:
+        "200":
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  # ============================================================================
+  # Admin Customer Management Endpoints
+  # ============================================================================
+  /admin/customers:
+    get:
+      tags:
+        - users
+      summary: List all customers
+      description: Get all customers for the admin's organization
+      operationId: getAllCustomers
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Customers retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Customer"
+    post:
+      tags:
+        - users
+      summary: Create customer
+      description: Create a new customer with optional car data
+      operationId: createCustomerByAdmin
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phoneNumber:
+                  type: string
+                address:
+                  type: string
+                postalCode:
+                  type: string
+                city:
+                  type: string
+                isPermanentParker:
+                  type: boolean
+                  default: false
+                parkingStartDate:
+                  type: string
+                  format: date
+                parkingEndDate:
+                  type: string
+                  format: date
+                cars:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - licensePlate
+                    properties:
+                      licensePlate:
+                        type: string
+                      brand:
+                        type: string
+                      model:
+                        type: string
+                      label:
+                        type: string
+      responses:
+        "201":
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Customer"
+  /admin/customers/{id}:
+    get:
+      tags:
+        - users
+      summary: Get customer by ID
+      description: Get customer details with all associated cars
+      operationId: getCustomerById
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Customer retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Customer"
+    put:
+      tags:
+        - users
+      summary: Update customer
+      description: Update customer information and cars
+      operationId: updateCustomerByAdmin
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phoneNumber:
+                  type: string
+                address:
+                  type: string
+                postalCode:
+                  type: string
+                city:
+                  type: string
+                isPermanentParker:
+                  type: boolean
+                parkingStartDate:
+                  type: string
+                  format: date
+                parkingEndDate:
+                  type: string
+                  format: date
+                cars:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - licensePlate
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      licensePlate:
+                        type: string
+                      brand:
+                        type: string
+                      model:
+                        type: string
+                      label:
+                        type: string
+      responses:
+        "200":
+          description: Customer updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Customer"
+    delete:
+      tags:
+        - users
+      summary: Delete customer
+      description: Soft delete a customer (sets status to inactive)
+      operationId: deleteCustomerByAdmin
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Customer deleted successfully
+
+  # ============================================================================
+  # Parking Lot Management Endpoints
+  # ============================================================================
+  /parking-lots:
+    get:
+      tags:
+        - parking
+      summary: List parking lots
+      description: Get all parking lots with pagination and filters
+      operationId: listParkingLots
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: city
+          in: query
+          schema:
+            type: string
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Parking lots retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/ParkingLot"
+                      meta:
+                        type: object
+                        properties:
+                          page:
+                            type: integer
+                          limit:
+                            type: integer
+                          total:
+                            type: integer
+    post:
+      tags:
+        - parking
+      summary: Create parking lot
+      description: Create a new parking lot
+      operationId: createParkingLot
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateParkingLotRequest"
+      responses:
+        "201":
+          description: Parking lot created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/ParkingLot"
+  /parking-lots/{id}:
+    get:
+      tags:
+        - parking
+      summary: Get parking lot by ID
+      description: Retrieve a single parking lot by its ID
+      operationId: getParkingLotById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Parking lot retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/ParkingLot"
+        "404":
+          description: Parking lot not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      tags:
+        - parking
+      summary: Update parking lot
+      description: Update an existing parking lot
+      operationId: updateParkingLot
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                pricePerHour:
+                  type: string
+                openingTime:
+                  type: string
+                closingTime:
+                  type: string
+                isOpen247:
+                  type: boolean
+                isActive:
+                  type: boolean
+      responses:
+        "200":
+          description: Parking lot updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/ParkingLot"
+    delete:
+      tags:
+        - parking
+      summary: Delete parking lot
+      description: Soft delete a parking lot
+      operationId: deleteParkingLot
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Parking lot deleted successfully
+
+  # ============================================================================
+  # Booking and Reservation Endpoints
+  # ============================================================================
+  /guest/validate-plate:
+    post:
+      tags:
+        - bookings
+      summary: Validate guest license plate
+      description: Validate a guest license plate for parking access (public endpoint with reCAPTCHA)
+      operationId: validateGuestPlate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - licensePlate
+                - recaptchaToken
+              properties:
+                licensePlate:
+                  type: string
+                recaptchaToken:
+                  type: string
+      responses:
+        "200":
+          description: License plate validated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  # ============================================================================
+  # Payment Processing Endpoints
+  # ============================================================================
+  /datahub/entry:
+    post:
+      tags:
+        - payments
+      summary: Process camera entry event
+      description: Webhook endpoint for ALPR camera system to process vehicle entry events
+      operationId: processCameraEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                licensePlate:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+                cameraId:
+                  type: string
+                imageUrl:
+                  type: string
+      responses:
+        "200":
+          description: Entry event processed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  # ============================================================================
+  # Default / Utility Endpoints
+  # ============================================================================
+  /health:
+    servers:
+      - url: http://localhost:3000
+        description: Root level endpoint
+    get:
+      tags:
+        - default
+      summary: Health check
+      description: Check API server health status
+      operationId: healthCheck
+      responses:
+        "200":
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  timestamp:
+                    type: string
+                    format: date-time
+                  uptime:
+                    type: number
+  /admin/seed-db:
+    post:
+      tags:
+        - default
+      summary: Seed database
+      description: Seed the database with initial data (development only)
+      operationId: seedDatabase
+      responses:
+        "200":
+          description: Database seeded successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
