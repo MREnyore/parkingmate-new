@@ -9,3 +9,6 @@ project = .
 
 # Don't run npm install automatically (we'll handle it via startup script)
 SCM_DO_BUILD_DURING_DEPLOYMENT = false
+
+# Startup command (configure this in Azure Portal > Configuration > General Settings)
+# Startup Command: bash startup.sh

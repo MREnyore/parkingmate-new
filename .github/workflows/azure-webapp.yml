@@ -1,4 +1,4 @@
-name: Production Deploy (With Node Modules Exclusion)
+name: Production Deploy 
 
 on:
   push:
@@ -64,7 +64,6 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: web-app.zip
-        startup-command: 'bash startup.sh'
 
     - name: Upload artifact for deployment jobs
       uses: actions/upload-artifact@v4
