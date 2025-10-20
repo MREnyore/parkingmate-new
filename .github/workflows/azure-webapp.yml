@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App
+name: Production Deploy (With Node Modules Exclusion)
 
 on:
   push:
