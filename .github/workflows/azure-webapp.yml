@@ -37,15 +37,25 @@ jobs:
       run: pnpm install --frozen-lockfile
 
     - name: Generate API client
-      run: pnpm api:generate
+      run: |
+        pnpm --filter @parkingmate/api api:generate
+        pnpm --filter @parkingmate/api-client api:generate
 
     - name: Build application
       run: pnpm build
       env:
         CI: false
 
+    - name: Prepare deployment files
+      run: |
+        # Ensure startup script has executable permissions
+        chmod +x startup.sh
+        
     - name: Zip artifact for deployment
-      run: zip -r web-app.zip .
+      run: |
+        # Create deployment package excluding node_modules (matches Azure rsync logs)
+        # Azure will handle node_modules installation via package.json
+        zip -r web-app.zip . -x "node_modules/*" -x ".git/*" -x ".github/*" -x ".turbo/*" -x "*.log"
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
@@ -54,6 +64,7 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: web-app.zip
+        startup-command: 'bash startup.sh'
 
     - name: Upload artifact for deployment jobs
       uses: actions/upload-artifact@v4

@@ -1,0 +1,11 @@
+[config]
+# Azure deployment configuration
+# This tells Azure to use the custom deployment script behavior
+# SCM_DO_BUILD_DURING_DEPLOYMENT should be set to true in Azure App Settings
+# to ensure dependencies are installed on the server
+
+# Use the project root as the deployment source
+project = .
+
+# Don't run npm install automatically (we'll handle it via startup script)
+SCM_DO_BUILD_DURING_DEPLOYMENT = false
