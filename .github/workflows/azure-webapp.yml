@@ -67,21 +67,13 @@ jobs:
         # Copy web.config
         Copy-Item -Path web.config -Destination deploy\ -Force
         
-        # Install production dependencies for Windows with native builds
+        # Install production dependencies
         Set-Location deploy
-        # Use npm for production to ensure Windows-compatible native modules
         npm install --production --no-optional
         Set-Location ..
         
         Write-Host "Deployment directory prepared"
         Get-ChildItem -Path deploy\ | Format-Table Name, Length, LastWriteTime
-        
-        # Verify bcrypt module is present
-        if (Test-Path "deploy\node_modules\bcrypt") {
-          Write-Host "[OK] bcrypt module installed" -ForegroundColor Green
-        } else {
-          Write-Host "[WARNING] bcrypt module not found" -ForegroundColor Yellow
-        }
         
     - name: Create deployment package
       shell: powershell

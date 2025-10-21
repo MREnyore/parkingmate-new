@@ -2,15 +2,12 @@
 
 ## Cross-Platform Build Strategy
 
-### The Issue
-- **bcrypt** is a native Node.js module that must be compiled for the target platform
-- Building on Linux but deploying to Windows would cause runtime errors
-
-### The Solution
+### Package Management
 ✅ **Current Setup:**
 - Build on `windows-latest` runner (line 22 of workflow)
 - Use **pnpm** for development dependencies (fast, efficient)
 - Use **npm** for production deployment package (Azure-compatible, no workspace: protocol)
+- Use **bcryptjs** instead of bcrypt (pure JavaScript, no native bindings)
 
 ### Why This Hybrid Approach?
 
@@ -22,7 +19,13 @@
 **npm for Production Package:**
 - Azure Web Apps has built-in npm support
 - No `workspace:*` protocol issues in standalone package
-- Native modules (bcrypt) build correctly on Windows runner
+- Simplified deployment without native module compilation
+
+**bcryptjs for Password Hashing:**
+- Pure JavaScript implementation (no native bindings)
+- Cross-platform compatible
+- No compilation issues when deploying to different OS environments
+- Same API as bcrypt, drop-in replacement
 
 ### Key Workflow Steps
 
@@ -33,11 +36,8 @@
 2. **Create Standalone Package** (npm)
    - Strip workspace dependencies from package.json
    - `npm install --production --no-optional`
-   - Package with all Windows-compiled native modules
+   - All dependencies are pure JavaScript, no platform-specific builds needed
 
 3. **Deploy to Azure**
-   - Zip contains Windows-compatible binaries
-   - Ready to run on Azure Web Apps
-
-### Verification
-The workflow includes a check to verify bcrypt is properly installed before deployment.
+   - Zip contains all dependencies
+   - Ready to run on Azure Web Apps (Windows or Linux)
