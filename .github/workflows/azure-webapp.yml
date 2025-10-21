@@ -29,14 +29,19 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    - name: Install dependencies (npm workspaces)
-      run: npm install
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9.15.0
 
-    - name: Generate API types (npm workspace)
-      run: npm --workspace @parkingmate/api run api:generate
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
 
-    - name: Build backend API (npm workspace)
-      run: npm --workspace @parkingmate/api run build
+    - name: Generate API types
+      run: pnpm --filter @parkingmate/api api:generate
+
+    - name: Build backend API
+      run: pnpm --filter @parkingmate/api build
 
     
 
@@ -74,13 +79,21 @@ jobs:
         # Copy web.config
         cp web.config deploy/
         
-        # Install production dependencies on Windows with native builds
+        # Install production dependencies for Windows with native builds
         cd deploy
-        npm install --production --no-optional --build-from-source
+        # Use npm for production to ensure Windows-compatible native modules
+        npm install --production --no-optional
         cd ..
         
         echo "Deployment directory prepared"
         ls -la deploy/
+        
+        # Verify bcrypt module is present
+        if [ -d "deploy/node_modules/bcrypt" ]; then
+          echo "✓ bcrypt module installed"
+        else
+          echo "✗ WARNING: bcrypt module not found"
+        fi
         
     - name: Create deployment package
       run: |
