@@ -28,36 +28,16 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
-        cache: 'pnpm'
+        cache: 'npm'
 
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 9.15.0
+    - name: Install dependencies (npm workspaces)
+      run: npm install
 
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+    - name: Generate API types (npm workspace)
+      run: npm --workspace @parkingmate/api run api:generate
 
-    - name: Setup pnpm cache
-      uses: actions/cache@v4
-      with:
-        path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
-
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile --prefer-offline
-
-    - name: Generate API types
-      working-directory: apps/api
-      run: pnpm api:generate
-
-    - name: Build backend API
-      working-directory: apps/api
-      run: pnpm build
+    - name: Build backend API (npm workspace)
+      run: npm --workspace @parkingmate/api run build
 
     
 
