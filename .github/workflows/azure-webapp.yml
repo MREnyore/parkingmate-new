@@ -47,15 +47,11 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile --prefer-offline
 
-    - name: Generate API client
-      run: |
-        pnpm --filter @parkingmate/api api:generate
-        pnpm --filter @parkingmate/api-client api:generate
+    - name: Generate API types
+      run: pnpm --filter @parkingmate/api api:generate
 
-    - name: Build application
-      run: pnpm build
-      env:
-        CI: false
+    - name: Build backend API only
+      run: pnpm --filter @parkingmate/api build
 
     - name: Prepare deployment files
       run: |
@@ -74,16 +70,24 @@ jobs:
         
     - name: Zip artifact for deployment
       run: |
-        # Create deployment package excluding node_modules (matches Azure rsync logs)
-        # Azure will handle node_modules installation via package.json
-        zip -r web-app.zip . \
+        # Create deployment package with only backend files
+        # Include: startup script, API app, shared packages, and root configs
+        zip -r web-app.zip \
+          startup.sh \
+          package.json \
+          pnpm-workspace.yaml \
+          pnpm-lock.yaml \
+          apps/api \
+          packages \
           -x "node_modules/*" \
           -x ".git/*" \
           -x ".github/*" \
           -x ".turbo/*" \
           -x "*.log" \
-          -x "apps/*/node_modules/*" \
-          -x "packages/*/node_modules/*"
+          -x "apps/api/node_modules/*" \
+          -x "packages/*/node_modules/*" \
+          -x "apps/api/src/*" \
+          -x "apps/web/*"
         
         echo "Deployment package created:"
         unzip -l web-app.zip | grep "apps/api/dist" | head -20
