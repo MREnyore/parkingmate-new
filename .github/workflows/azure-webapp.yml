@@ -14,17 +14,12 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: parkingmate-api  # Changed to match your API app name
+  AZURE_WEBAPP_NAME: parkingmate-api
   NODE_VERSION: '20.x'
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        shell: bash
-        working-directory: apps/api
     
     steps:
     - uses: actions/checkout@v4
@@ -56,14 +51,15 @@ jobs:
       run: pnpm install --frozen-lockfile --prefer-offline
 
     - name: Generate API types
+      working-directory: apps/api
       run: pnpm api:generate
 
     - name: Build backend API
+      working-directory: apps/api
       run: pnpm build
 
     - name: Prepare deployment files
       run: |
-        cd ../..
         # Ensure startup script has executable permissions
         chmod +x startup.sh
         
