@@ -120,4 +120,5 @@ dist/
 !**/drizzle/migrations/*.sql
 
 # API Client generated files
-packages/api-client/src/generated/**
+# Commented out to allow committing generated API types for deployment
+# packages/api-client/src/generated/**
