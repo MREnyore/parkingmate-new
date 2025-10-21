@@ -58,42 +58,51 @@ jobs:
       working-directory: apps/api
       run: pnpm build
 
-    - name: Prepare deployment files
+    - name: Prepare standalone deployment
       run: |
-        # Verify build output exists
-        echo "Checking build output..."
-        if [ ! -d "apps/api/dist" ]; then
-          echo "ERROR: apps/api/dist not found!"
-          exit 1
-        fi
+        # Create a standalone deployment directory without workspace dependencies
+        mkdir -p deploy
         
-        # Verify web.config exists
-        if [ ! -f "web.config" ]; then
-          echo "ERROR: web.config not found!"
-          exit 1
-        fi
+        # Copy built files
+        cp -r apps/api/dist deploy/
         
-        echo "Build output verified:"
-        ls -la apps/api/dist/
+        # Copy and modify package.json to remove workspace dependencies
+        cd apps/api
+        node -e "
+          const pkg = require('./package.json');
+          delete pkg.devDependencies;
+          // Remove workspace protocol from dependencies
+          if (pkg.dependencies) {
+            Object.keys(pkg.dependencies).forEach(key => {
+              if (pkg.dependencies[key].startsWith('workspace:')) {
+                delete pkg.dependencies[key];
+              }
+            });
+          }
+          const fs = require('fs');
+          fs.writeFileSync('../../deploy/package.json', JSON.stringify(pkg, null, 2));
+        "
+        cd ../..
+        
+        # Copy web.config
+        cp web.config deploy/
+        
+        # Install production dependencies using npm (not pnpm) to avoid workspace issues
+        cd deploy
+        npm install --production --legacy-peer-deps
+        cd ..
+        
+        echo "Deployment directory prepared"
+        ls -la deploy/
         
     - name: Create deployment package
       run: |
-        # Create deployment package with entire workspace structure
-        # pnpm workspaces need the root node_modules for proper dependency resolution
-        zip -r web-app.zip \
-          web.config \
-          node_modules \
-          apps/api/dist \
-          apps/api/package.json \
-          package.json \
+        # Package the standalone deployment directory
+        cd deploy
+        zip -r ../web-app.zip . \
           -x "**/.git/*" \
-          -x "**/.github/*" \
-          -x "**/.turbo/*" \
-          -x "**/*.log" \
-          -x "**/test/*" \
-          -x "**/*.test.*" \
-          -x "**/apps/web/*" \
-          -x "**/packages/*/node_modules/*"
+          -x "**/*.log"
+        cd ..
         
         echo "Deployment package created:"
         unzip -l web-app.zip | head -20
