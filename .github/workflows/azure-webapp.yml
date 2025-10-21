@@ -58,6 +58,14 @@ jobs:
       working-directory: apps/api
       run: pnpm build
 
+    - name: Cache npm dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('apps/api/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
     - name: Prepare standalone deployment
       run: |
         # Create a standalone deployment directory without workspace dependencies
@@ -89,7 +97,7 @@ jobs:
         
         # Install production dependencies using npm (not pnpm) to avoid workspace issues
         cd deploy
-        npm install --production --legacy-peer-deps
+        npm install --production --legacy-peer-deps --prefer-offline
         cd ..
         
         echo "Deployment directory prepared"
