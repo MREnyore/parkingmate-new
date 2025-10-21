@@ -90,7 +90,7 @@ jobs:
           -x "apps/web/*"
         
         echo "Deployment package created:"
-        unzip -l web-app.zip | grep "apps/api/dist" | head -20
+        unzip -l web-app.zip | grep "apps/api/dist" | head -20 || true
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
