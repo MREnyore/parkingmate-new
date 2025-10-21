@@ -19,7 +19,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
     steps:
     - uses: actions/checkout@v4
@@ -28,6 +28,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
+        cache: 'pnpm'
 
     - name: Install pnpm
       uses: pnpm/action-setup@v4
@@ -58,15 +59,10 @@ jobs:
       working-directory: apps/api
       run: pnpm build
 
-    - name: Cache npm dependencies
-      uses: actions/cache@v4
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-npm-${{ hashFiles('apps/api/package.json') }}
-        restore-keys: |
-          ${{ runner.os }}-npm-
+    
 
     - name: Prepare standalone deployment
+      shell: bash
       run: |
         # Create a standalone deployment directory without workspace dependencies
         mkdir -p deploy
@@ -84,10 +80,9 @@ jobs:
         node -e "
           const pkg = require('./package.json');
           delete pkg.devDependencies;
-          // Remove workspace protocol from dependencies
           if (pkg.dependencies) {
             Object.keys(pkg.dependencies).forEach(key => {
-              if (pkg.dependencies[key].startsWith('workspace:')) {
+              if (typeof pkg.dependencies[key] === 'string' && pkg.dependencies[key].startsWith('workspace:')) {
                 delete pkg.dependencies[key];
               }
             });
@@ -100,9 +95,9 @@ jobs:
         # Copy web.config
         cp web.config deploy/
         
-        # Install production dependencies using npm (not pnpm) to avoid workspace issues
+        # Install production dependencies on Windows with native builds
         cd deploy
-        npm install --production --legacy-peer-deps --prefer-offline
+        npm install --production --no-optional --build-from-source
         cd ..
         
         echo "Deployment directory prepared"
