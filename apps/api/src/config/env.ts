@@ -1,14 +1,19 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import dotenv from 'dotenv'
 import { z } from 'zod'
 
-// Load dotenv only in development (Azure App Service injects env vars directly)
-if (process.env.NODE_ENV !== 'production') {
-  // Dynamically import dotenv only in development
-  const dotenv = await import('dotenv')
-  const __filename = fileURLToPath(import.meta.url)
-  const __dirname = path.dirname(__filename)
+// Get current file directory in ESM
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// Load environment variables from project root (../../../../.env)
+// In production (Azure), this will fail silently as there's no .env file
+// Azure App Service injects env vars directly into process.env
+try {
   dotenv.config({ path: path.resolve(__dirname, '../../../../.env') })
+} catch {
+  // Ignore if .env file doesn't exist (production)
 }
 
 /**

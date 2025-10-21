@@ -58,6 +58,10 @@ jobs:
       working-directory: apps/api
       run: pnpm build
 
+    - name: Install production dependencies
+      working-directory: apps/api
+      run: pnpm install --prod --frozen-lockfile
+
     - name: Prepare deployment files
       run: |
         # Verify build output exists
@@ -80,16 +84,10 @@ jobs:
       run: |
         # Create deployment package for Windows Azure Web App
         zip -r web-app.zip \
-          .deployment \
-          deploy.cmd \
           web.config \
-          package.json \
-          pnpm-workspace.yaml \
-          pnpm-lock.yaml \
           apps/api/dist \
+          apps/api/node_modules \
           apps/api/package.json \
-          packages/ \
-          -x "**/node_modules/*" \
           -x "**/.git/*" \
           -x "**/.github/*" \
           -x "**/.turbo/*" \
