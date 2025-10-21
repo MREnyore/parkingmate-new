@@ -10,6 +10,7 @@ on:
       - 'pnpm-workspace.yaml'
       - 'pnpm-lock.yaml'
       - 'startup.sh'
+      - 'web.config'
   workflow_dispatch:
 
 env:
@@ -68,9 +69,16 @@ jobs:
         fi
         chmod +x startup.sh
         
+        # Verify web.config exists
+        if [ ! -f "web.config" ]; then
+          echo "ERROR: web.config not found!"
+          exit 1
+        fi
+        
         # Create deployment package
         zip -r web-app.zip \
           startup.sh \
+          web.config \
           package.json \
           pnpm-workspace.yaml \
           pnpm-lock.yaml \
