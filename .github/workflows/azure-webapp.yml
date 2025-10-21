@@ -1,4 +1,4 @@
-name: Backend Production Deploy 
+name: Production Deploy 
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: parkingmate-api
+  AZURE_WEBAPP_NAME: parkingmate-api  # Changed to match your API app name
   NODE_VERSION: '20.x'
 
 jobs:
@@ -23,8 +23,8 @@ jobs:
     
     defaults:
       run:
-        working-directory: apps/api
         shell: bash
+        working-directory: apps/api
     
     steps:
     - uses: actions/checkout@v4
@@ -33,12 +33,24 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
-        cache: 'pnpm'
 
     - name: Install pnpm
       uses: pnpm/action-setup@v4
       with:
         version: 9.15.0
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - name: Setup pnpm cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile --prefer-offline
@@ -49,25 +61,18 @@ jobs:
     - name: Build backend API
       run: pnpm build
 
-    - name: Verify build output
-      run: |
-        if [ ! -d "dist" ]; then
-          echo "ERROR: Build output not found in dist/"
-          ls -la
-          exit 1
-        fi
-        echo "Build output verified:"
-        ls -la dist/
-
     - name: Prepare deployment files
       run: |
         cd ../..
-        # Verify startup script exists and is executable
-        if [ ! -f "startup.sh" ]; then
-          echo "ERROR: startup.sh not found!"
+        # Ensure startup script has executable permissions
+        chmod +x startup.sh
+        
+        # Verify build output exists
+        echo "Checking build output..."
+        if [ ! -d "apps/api/dist" ]; then
+          echo "ERROR: apps/api/dist not found!"
           exit 1
         fi
-        chmod +x startup.sh
         
         # Verify web.config exists
         if [ ! -f "web.config" ]; then
@@ -75,6 +80,11 @@ jobs:
           exit 1
         fi
         
+        echo "Build output verified:"
+        ls -la apps/api/dist/
+        
+    - name: Create deployment package
+      run: |
         # Create deployment package
         zip -r web-app.zip \
           .deployment \
@@ -93,7 +103,7 @@ jobs:
           -x "**/*.log" \
           -x "**/test/*" \
           -x "**/*.test.*"
-
+        
         echo "Deployment package created:"
         unzip -l web-app.zip | head -20
 
