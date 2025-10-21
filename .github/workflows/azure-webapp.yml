@@ -77,6 +77,7 @@ jobs:
         
         # Create deployment package
         zip -r web-app.zip \
+          .deployment \
           startup.sh \
           web.config \
           package.json \
