@@ -9,7 +9,6 @@ on:
       - 'package.json'
       - 'pnpm-workspace.yaml'
       - 'pnpm-lock.yaml'
-      - 'startup.sh'
       - 'web.config'
   workflow_dispatch:
 
@@ -60,9 +59,6 @@ jobs:
 
     - name: Prepare deployment files
       run: |
-        # Ensure startup script has executable permissions
-        chmod +x startup.sh
-        
         # Verify build output exists
         echo "Checking build output..."
         if [ ! -d "apps/api/dist" ]; then
@@ -81,10 +77,9 @@ jobs:
         
     - name: Create deployment package
       run: |
-        # Create deployment package
+        # Create deployment package for Windows Azure Web App
         zip -r web-app.zip \
           .deployment \
-          startup.sh \
           web.config \
           package.json \
           pnpm-workspace.yaml \
