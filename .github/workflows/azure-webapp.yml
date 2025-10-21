@@ -15,6 +15,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: parkingmate-api
   NODE_VERSION: '20.x'
+  COMMIT_HASH: ${{ github.sha }}
 
 jobs:
   build-and-deploy:
