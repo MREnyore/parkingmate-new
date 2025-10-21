@@ -78,9 +78,9 @@ jobs:
         
         # Verify bcrypt module is present
         if (Test-Path "deploy\node_modules\bcrypt") {
-          Write-Host "✓ bcrypt module installed" -ForegroundColor Green
+          Write-Host "[OK] bcrypt module installed" -ForegroundColor Green
         } else {
-          Write-Host "✗ WARNING: bcrypt module not found" -ForegroundColor Yellow
+          Write-Host "[WARNING] bcrypt module not found" -ForegroundColor Yellow
         }
         
     - name: Create deployment package
