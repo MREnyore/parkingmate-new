@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../config/database'
-import { type NewOrganization, type Organization, organizations } from '../db'
+import { db } from '../config/database.js'
+import { type NewOrganization, type Organization, organizations } from '../db/index.js'
 
 export const organizationService = {
   /**

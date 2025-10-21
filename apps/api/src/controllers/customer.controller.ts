@@ -1,16 +1,16 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { carService } from '../services/car.service'
-import { customerService } from '../services/customer.service'
-import { parkingSessionService } from '../services/parking-session.service'
-import { validationService } from '../services/validation.service'
+import { carService } from '../services/car.service.js'
+import { customerService } from '../services/customer.service.js'
+import { parkingSessionService } from '../services/parking-session.service.js'
+import { validationService } from '../services/validation.service.js'
 import type {
   AddCarInput,
   DeleteCarParams,
   UpdateCarInput,
   UpdateCarParams,
   UpdateCustomerInfoInput
-} from '../types/customer.types'
+} from '../types/customer.types.js'
 
 /**
  * Get customer info with all cars

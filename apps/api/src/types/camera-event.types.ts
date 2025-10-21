@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { licensePlateSchema, uuidSchema } from './common.types'
+import { licensePlateSchema, uuidSchema } from './common.types.js'
 
 /**
  * Camera Event / ALPR-related Zod schemas

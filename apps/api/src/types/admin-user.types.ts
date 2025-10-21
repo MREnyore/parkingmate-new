@@ -4,7 +4,7 @@ import {
     passwordSchema,
     phoneSchema,
     uuidSchema
-} from './common.types'
+} from './common.types.js'
 
 /**
  * Admin User-related Zod schemas

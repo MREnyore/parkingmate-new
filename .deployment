@@ -1,4 +1,6 @@
 [config]
 # Azure deployment configuration
-# Skip automatic build - we're deploying pre-built code
-SCM_DO_BUILD_DURING_DEPLOYMENT = false
+# Enable build during deployment to install dependencies
+SCM_DO_BUILD_DURING_DEPLOYMENT = true
+# Don't run npm/pnpm build since we're deploying pre-built code
+PROJECT = apps/api

@@ -1,12 +1,12 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { adminUserService } from '../services/admin-user.service'
-import { fileUploadService } from '../services/file-upload.service'
-import { passwordService } from '../services/password.service'
+import { adminUserService } from '../services/admin-user.service.js'
+import { fileUploadService } from '../services/file-upload.service.js'
+import { passwordService } from '../services/password.service.js'
 import type {
   ChangePasswordInput,
   UpdateAdminProfileInput
-} from '../types/admin-user.types'
+} from '../types/admin-user.types.js'
 
 /**
  * Get admin profile

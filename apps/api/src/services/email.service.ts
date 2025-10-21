@@ -1,5 +1,5 @@
 import sendgrid from '@sendgrid/mail'
-import { env } from '../config/env'
+import { env } from '../config/env.js'
 
 /**
  * Email service for sending OTP codes and registration emails

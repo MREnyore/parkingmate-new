@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm'
-import { db } from '../config/database'
-import { type Car, cars, type NewCar } from '../db'
+import { db } from '../config/database.js'
+import { type Car, cars, type NewCar } from '../db/index.js'
 
 export const carService = {
   /**

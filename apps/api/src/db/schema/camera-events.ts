@@ -6,7 +6,7 @@ import {
   uuid,
   varchar
 } from 'drizzle-orm/pg-core'
-import { organizations } from './organizations'
+import { organizations } from './organizations.js'
 
 /**
  * Camera Events table - ALPR event logging

@@ -1,13 +1,13 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { env } from '../config/env'
-import { cameraEventService } from '../services/camera-event.service'
-import { carService } from '../services/car.service'
-import { guestService } from '../services/guest.service'
-import { parkingSessionService } from '../services/parking-session.service'
-import { recaptchaService } from '../services/recaptcha.service'
-import { validationService } from '../services/validation.service'
-import type { ValidateGuestPlateInput } from '../types/guest.types'
+import { env } from '../config/env.js'
+import { cameraEventService } from '../services/camera-event.service.js'
+import { carService } from '../services/car.service.js'
+import { guestService } from '../services/guest.service.js'
+import { parkingSessionService } from '../services/parking-session.service.js'
+import { recaptchaService } from '../services/recaptcha.service.js'
+import { validationService } from '../services/validation.service.js'
+import type { ValidateGuestPlateInput } from '../types/guest.types.js'
 
 /**
  * Validate guest license plate with reCAPTCHA

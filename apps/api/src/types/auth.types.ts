@@ -4,7 +4,7 @@ import {
     otpCodeSchema,
     passwordSchema,
     uuidSchema
-} from './common.types'
+} from './common.types.js'
 
 /**
  * Authentication-related Zod schemas

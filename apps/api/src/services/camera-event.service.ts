@@ -1,6 +1,6 @@
 import { and, desc, eq } from 'drizzle-orm'
-import { db } from '../config/database'
-import { type CameraEvent, cameraEvents, type NewCameraEvent } from '../db'
+import { db } from '../config/database.js'
+import { type CameraEvent, cameraEvents, type NewCameraEvent } from '../db/index.js'
 
 export const cameraEventService = {
   /**

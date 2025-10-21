@@ -1,10 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { jwtService } from '../services/jwt.service'
+import { jwtService } from '../services/jwt.service.js'
 import type {
   AuthenticatedAdminRequest,
   AuthenticatedCustomerRequest
-} from '../types/request.types'
+} from '../types/request.types.js'
 
 /**
  * Auth middleware - validates JWT and attaches user/customer to request

@@ -2,10 +2,10 @@ import { and, desc, eq } from 'drizzle-orm'
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
 import { z } from 'zod'
-import { db } from '../config/database'
-import { ERROR_CODES } from '../constants/error-codes'
-import { parkingLots } from '../db'
-import { type ParkingLot, ParkingLotRules } from '../types/parking-lot.types'
+import { db } from '../config/database.js'
+import { ERROR_CODES } from '../constants/error-codes.js'
+import { parkingLots } from '../db/index.js'
+import { type ParkingLot, ParkingLotRules } from '../types/parking-lot.types.js'
 
 // ============================================================================
 // Validation Schemas (Zod)

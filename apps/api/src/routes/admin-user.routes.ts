@@ -5,8 +5,8 @@ import {
   removeProfilePicture,
   updateProfile,
   uploadProfilePicture
-} from '../controllers/admin-user.controller'
-import { authMiddleware, requireAdmin } from '../middleware/auth.middleware'
+} from '../controllers/admin-user.controller.js'
+import { authMiddleware, requireAdmin } from '../middleware/auth.middleware.js'
 
 export async function adminUserRoutes(server: FastifyInstance) {
   // All routes require admin authentication

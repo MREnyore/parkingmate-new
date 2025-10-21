@@ -5,8 +5,8 @@ import {
   getCustomerInfo,
   updateCar,
   updateCustomerInfo
-} from '../controllers/customer.controller'
-import { authMiddleware, requireCustomer } from '../middleware/auth.middleware'
+} from '../controllers/customer.controller.js'
+import { authMiddleware, requireCustomer } from '../middleware/auth.middleware.js'
 
 export async function customerRoutes(server: FastifyInstance) {
   // All customer routes require authentication

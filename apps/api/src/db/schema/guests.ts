@@ -1,5 +1,5 @@
 import { pgEnum, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
-import { organizations } from './organizations'
+import { organizations } from './organizations.js'
 
 /**
  * Guest status enum - Guest parking validation status

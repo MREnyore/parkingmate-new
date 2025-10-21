@@ -1,16 +1,16 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { env } from '../config/env'
-import { adminUserService } from '../services/admin-user.service'
-import { customerService } from '../services/customer.service'
-import { customerRefreshTokenService } from '../services/customer-refresh-token.service'
-import { customerRegistrationTokenService } from '../services/customer-registration-token.service'
-import { emailService } from '../services/email.service'
-import { jwtService } from '../services/jwt.service'
-import { otpCodeService } from '../services/otp-code.service'
-import { passwordService } from '../services/password.service'
-import { refreshTokenService } from '../services/refresh-token.service'
-import { validationService } from '../services/validation.service'
+import { env } from '../config/env.js'
+import { adminUserService } from '../services/admin-user.service.js'
+import { customerService } from '../services/customer.service.js'
+import { customerRefreshTokenService } from '../services/customer-refresh-token.service.js'
+import { customerRegistrationTokenService } from '../services/customer-registration-token.service.js'
+import { emailService } from '../services/email.service.js'
+import { jwtService } from '../services/jwt.service.js'
+import { otpCodeService } from '../services/otp-code.service.js'
+import { passwordService } from '../services/password.service.js'
+import { refreshTokenService } from '../services/refresh-token.service.js'
+import { validationService } from '../services/validation.service.js'
 import type {
   AdminLoginInput,
   AdminRegisterInput,
@@ -21,7 +21,7 @@ import type {
   ValidateAuthTokenInput,
   ValidateRegistrationTokenInput,
   VerifyOtpInput
-} from '../types/auth.types'
+} from '../types/auth.types.js'
 
 /**
  * Admin login with email/password

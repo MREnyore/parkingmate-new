@@ -1,10 +1,10 @@
 import { and, eq, isNull } from 'drizzle-orm'
-import { db } from '../config/database'
+import { db } from '../config/database.js'
 import {
   type NewParkingSession,
   type ParkingSession,
   parkingSessions
-} from '../db'
+} from '../db/index.js'
 
 export const parkingSessionService = {
   /**

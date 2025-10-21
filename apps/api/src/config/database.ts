@@ -1,5 +1,5 @@
-import { createDatabase, type Database } from '../db/client'
-import { env } from './env'
+import { createDatabase, type Database } from '../db/client.js'
+import { env } from './env.js'
 
 /**
  * Database client instance

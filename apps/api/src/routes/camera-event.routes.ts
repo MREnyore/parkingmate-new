@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify'
-import { processEntry } from '../controllers/camera-event.controller'
+import { processEntry } from '../controllers/camera-event.controller.js'
 
 export async function cameraEventRoutes(server: FastifyInstance) {
   // ALPR webhook - no authentication (comes from camera system)

@@ -1,10 +1,10 @@
 import { and, eq } from 'drizzle-orm'
-import { db } from '../config/database'
+import { db } from '../config/database.js'
 import {
   type CustomerRefreshToken,
   customerRefreshTokens,
   type NewCustomerRefreshToken
-} from '../db'
+} from '../db/index.js'
 
 export const customerRefreshTokenService = {
   /**

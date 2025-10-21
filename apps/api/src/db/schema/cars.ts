@@ -1,6 +1,6 @@
 import { pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
-import { customers } from './customers'
-import { organizations } from './organizations'
+import { customers } from './customers.js'
+import { organizations } from './organizations.js'
 
 /**
  * Cars table - Vehicle management with license plates

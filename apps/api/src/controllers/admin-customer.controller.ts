@@ -1,8 +1,8 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { carService } from '../services/car.service'
-import { customerService } from '../services/customer.service'
-import { validationService } from '../services/validation.service'
+import { carService } from '../services/car.service.js'
+import { customerService } from '../services/customer.service.js'
+import { validationService } from '../services/validation.service.js'
 
 interface CreateCustomerBody {
   name: string

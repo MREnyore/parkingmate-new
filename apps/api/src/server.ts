@@ -8,9 +8,9 @@ import swagger from '@fastify/swagger'
 import swaggerUi from '@fastify/swagger-ui'
 import Fastify, { type FastifyInstance } from 'fastify'
 import * as yaml from 'js-yaml'
-import { env } from './config/env'
-import { errorHandler } from './middleware/error-handler.middleware'
-import { registerRateLimiter } from './middleware/rate-limiter.middleware'
+import { env } from './config/env.js'
+import { errorHandler } from './middleware/error-handler.middleware.js'
+import { registerRateLimiter } from './middleware/rate-limiter.middleware.js'
 
 /**
  * Create and configure Fastify server
@@ -126,7 +126,7 @@ export const createServer = async (): Promise<FastifyInstance> => {
   })
 
   // Register API routes
-  const { registerRoutes } = await import('./routes/router')
+  const { registerRoutes } = await import('./routes/router.js')
   await server.register(registerRoutes, {
     prefix: `${env.API_PREFIX}/${env.API_VERSION}`
   })

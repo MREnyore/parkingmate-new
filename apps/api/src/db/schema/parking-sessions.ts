@@ -6,11 +6,11 @@ import {
   uuid,
   varchar
 } from 'drizzle-orm/pg-core'
-import { cameraEvents } from './camera-events'
-import { cars } from './cars'
-import { customers } from './customers'
-import { organizations } from './organizations'
-import { parkingLots } from './parking'
+import { cameraEvents } from './camera-events.js'
+import { cars } from './cars.js'
+import { customers } from './customers.js'
+import { organizations } from './organizations.js'
+import { parkingLots } from './parking.js'
 
 /**
  * Parking session status enum

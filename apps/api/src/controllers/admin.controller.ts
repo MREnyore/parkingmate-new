@@ -1,10 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { StatusCodes } from 'http-status-codes'
-import { adminUserService } from '../services/admin-user.service'
-import { carService } from '../services/car.service'
-import { customerService } from '../services/customer.service'
-import { organizationService } from '../services/organization.service'
-import { passwordService } from '../services/password.service'
+import { adminUserService } from '../services/admin-user.service.js'
+import { carService } from '../services/car.service.js'
+import { customerService } from '../services/customer.service.js'
+import { organizationService } from '../services/organization.service.js'
+import { passwordService } from '../services/password.service.js'
 
 /**
  * Seed database with initial data (development only)

@@ -2,7 +2,7 @@ import { createWriteStream, existsSync, mkdirSync, unlinkSync } from 'node:fs'
 import { join } from 'node:path'
 import { pipeline } from 'node:stream/promises'
 import type { MultipartFile } from '@fastify/multipart'
-import { env } from '../config/env'
+import { env } from '../config/env.js'
 
 /**
  * File upload service for handling profile pictures

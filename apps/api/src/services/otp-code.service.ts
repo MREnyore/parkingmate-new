@@ -1,6 +1,6 @@
 import { and, eq, gt, lt } from 'drizzle-orm'
-import { db } from '../config/database'
-import { type NewOtpCode, type OtpCode, otpCodes } from '../db'
+import { db } from '../config/database.js'
+import { type NewOtpCode, type OtpCode, otpCodes } from '../db/index.js'
 
 export const otpCodeService = {
   /**

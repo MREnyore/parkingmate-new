@@ -5,7 +5,7 @@ import {
     phoneSchema,
     postalCodeSchema,
     uuidSchema
-} from './common.types'
+} from './common.types.js'
 
 /**
  * Customer-related Zod schemas

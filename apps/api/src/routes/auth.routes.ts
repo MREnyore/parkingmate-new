@@ -12,12 +12,12 @@ import {
   validateAuthToken,
   validateRegistrationToken,
   verifyOtp
-} from '../controllers/auth.controller'
-import { authMiddleware } from '../middleware/auth.middleware'
+} from '../controllers/auth.controller.js'
+import { authMiddleware } from '../middleware/auth.middleware.js'
 import {
   authRateLimitOptions,
   otpRateLimitOptions
-} from '../middleware/rate-limiter.middleware'
+} from '../middleware/rate-limiter.middleware.js'
 
 export async function authRoutes(server: FastifyInstance) {
   // Admin login

@@ -6,7 +6,7 @@ import {
   uuid,
   varchar
 } from 'drizzle-orm/pg-core'
-import { customers } from './customers'
+import { customers } from './customers.js'
 
 /**
  * Customer Registration Tokens table - Customer registration flow tokens

@@ -5,8 +5,8 @@ import {
   getAllCustomers,
   getCustomerById,
   updateCustomer
-} from '../controllers/admin-customer.controller'
-import { authMiddleware, requireAdmin } from '../middleware/auth.middleware'
+} from '../controllers/admin-customer.controller.js'
+import { authMiddleware, requireAdmin } from '../middleware/auth.middleware.js'
 
 export async function adminCustomerRoutes(server: FastifyInstance) {
   // All routes require admin authentication

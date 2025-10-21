@@ -1,6 +1,6 @@
 import { and, eq, gt } from 'drizzle-orm'
-import { db } from '../config/database'
-import { type Guest, type GuestStatus, guests, type NewGuest } from '../db'
+import { db } from '../config/database.js'
+import { type Guest, type GuestStatus, guests, type NewGuest } from '../db/index.js'
 
 export const guestService = {
   /**

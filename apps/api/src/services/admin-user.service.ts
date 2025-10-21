@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../config/database'
-import { type NewUser, type User, users } from '../db'
+import { db } from '../config/database.js'
+import { type NewUser, type User, users } from '../db/index.js'
 
 export const adminUserService = {
   /**

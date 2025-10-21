@@ -1,6 +1,6 @@
 import { and, eq, gt, isNull, lt } from 'drizzle-orm'
-import { db } from '../config/database'
-import { type NewRefreshToken, type RefreshToken, refreshTokens } from '../db'
+import { db } from '../config/database.js'
+import { type NewRefreshToken, type RefreshToken, refreshTokens } from '../db/index.js'
 
 export const refreshTokenService = {
   /**

@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify'
-import { adminRoutes } from './admin.routes'
-import { adminCustomerRoutes } from './admin-customer.routes'
-import { adminUserRoutes } from './admin-user.routes'
-import { authRoutes } from './auth.routes'
-import { cameraEventRoutes } from './camera-event.routes'
-import { customerRoutes } from './customer.routes'
-import { guestRoutes } from './guest.routes'
-import { parkingLotRoutes } from './parking-lot.router'
+import { adminRoutes } from './admin.routes.js'
+import { adminCustomerRoutes } from './admin-customer.routes.js'
+import { adminUserRoutes } from './admin-user.routes.js'
+import { authRoutes } from './auth.routes.js'
+import { cameraEventRoutes } from './camera-event.routes.js'
+import { customerRoutes } from './customer.routes.js'
+import { guestRoutes } from './guest.routes.js'
+import { parkingLotRoutes } from './parking-lot.router.js'
 
 /**
  * Register all API routes

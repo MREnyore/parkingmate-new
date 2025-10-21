@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { licensePlateSchema } from './common.types'
+import { licensePlateSchema } from './common.types.js'
 
 /**
  * Guest validation-related Zod schemas
