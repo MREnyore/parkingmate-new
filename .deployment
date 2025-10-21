@@ -4,5 +4,3 @@
 SCM_DO_BUILD_DURING_DEPLOYMENT = false
 # Set the project directory
 PROJECT = .
-# Use custom deployment command
-DEPLOY_COMMAND = "deploy.cmd"

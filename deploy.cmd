@@ -1,13 +1,25 @@
 @echo off
+setlocal enabledelayedexpansion
 
-:: Change to the API directory
-cd /d %~dp0\apps\api
+echo Starting custom deployment for ParkingMate API...
 
-:: Install all dependencies using pnpm
+:: Install pnpm globally if not available
+where pnpm >nul 2>nul
+if %ERRORLEVEL% neq 0 (
+    echo Installing pnpm globally...
+    call npm install -g pnpm@9.15.0
+)
+
+:: Install dependencies from root (workspace)
+echo Installing workspace dependencies...
 call pnpm install --frozen-lockfile
 
+:: Change to the API directory
+echo Changing to API directory...
+cd /d %~dp0\apps\api
+
 :: Build the application
+echo Building the application...
 call pnpm run build
 
-:: Start the application
-node dist\index
+echo Deployment completed successfully!
