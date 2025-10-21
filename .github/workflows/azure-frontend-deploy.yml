@@ -43,6 +43,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile --prefer-offline
 
+    - name: Generate API types
+      run: pnpm --filter @parkingmate/api api:generate
+
     - name: Build frontend only
       run: pnpm --filter @parkingmate/ui build
       env:
