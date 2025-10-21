@@ -74,6 +74,9 @@ jobs:
         # Copy built files
         cp -r apps/api/dist deploy/
         
+        # Copy openapi.yml file (not copied by TypeScript build)
+        cp apps/api/openapi.yml deploy/
+        
         # Copy and modify package.json to remove workspace dependencies
         cd apps/api
         node -e "
