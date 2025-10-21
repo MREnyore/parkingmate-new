@@ -1,0 +1,5 @@
+{
+  "buildCommand": "pnpm install --filter @parkingmate/ui... --ignore-scripts && pnpm --filter @parkingmate/ui build",
+  "outputDirectory": "apps/web/dist",
+  "installCommand": "pnpm install --filter @parkingmate/ui... --ignore-scripts"
+}
