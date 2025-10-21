@@ -1,14 +1,15 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import dotenv from 'dotenv'
 import { z } from 'zod'
 
-// Get current file directory in ESM
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-// Load environment variables from project root (../../../../.env)
-dotenv.config({ path: path.resolve(__dirname, '../../../../.env') })
+// Load dotenv only in development (Azure App Service injects env vars directly)
+if (process.env.NODE_ENV !== 'production') {
+  // Dynamically import dotenv only in development
+  const dotenv = await import('dotenv')
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = path.dirname(__filename)
+  dotenv.config({ path: path.resolve(__dirname, '../../../../.env') })
+}
 
 /**
  * Environment validation schema using Zod
