@@ -18,6 +18,10 @@ call pnpm install --frozen-lockfile
 echo Changing to API directory...
 cd /d %~dp0\apps\api
 
+:: Install production dependencies for API package
+echo Installing API production dependencies...
+call pnpm install --frozen-lockfile --prod
+
 :: Build the application
 echo Building the application...
 call pnpm run build

@@ -81,6 +81,7 @@ jobs:
         # Create deployment package for Windows Azure Web App
         zip -r web-app.zip \
           .deployment \
+          deploy.cmd \
           web.config \
           package.json \
           pnpm-workspace.yaml \
