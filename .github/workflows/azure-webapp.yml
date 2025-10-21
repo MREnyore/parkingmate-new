@@ -46,66 +46,51 @@ jobs:
     
 
     - name: Prepare standalone deployment
-      shell: bash
+      shell: powershell
       run: |
         # Create a standalone deployment directory without workspace dependencies
-        mkdir -p deploy
+        New-Item -ItemType Directory -Force -Path deploy | Out-Null
         
         # Copy built files
-        cp -r apps/api/dist deploy/
+        Copy-Item -Path apps\api\dist -Destination deploy\ -Recurse -Force
         
         # Copy openapi.yml file to both locations (root and dist/src for compatibility)
-        cp apps/api/openapi.yml deploy/
-        mkdir -p deploy/dist/src
-        cp apps/api/openapi.yml deploy/dist/src/
+        Copy-Item -Path apps\api\openapi.yml -Destination deploy\ -Force
+        New-Item -ItemType Directory -Force -Path deploy\dist\src | Out-Null
+        Copy-Item -Path apps\api\openapi.yml -Destination deploy\dist\src\ -Force
         
         # Copy and modify package.json to remove workspace dependencies
-        cd apps/api
-        node -e "
-          const pkg = require('./package.json');
-          delete pkg.devDependencies;
-          if (pkg.dependencies) {
-            Object.keys(pkg.dependencies).forEach(key => {
-              if (typeof pkg.dependencies[key] === 'string' && pkg.dependencies[key].startsWith('workspace:')) {
-                delete pkg.dependencies[key];
-              }
-            });
-          }
-          const fs = require('fs');
-          fs.writeFileSync('../../deploy/package.json', JSON.stringify(pkg, null, 2));
-        "
-        cd ../..
+        Set-Location apps\api
+        node -e "const pkg = require('./package.json'); delete pkg.devDependencies; if (pkg.dependencies) { Object.keys(pkg.dependencies).forEach(key => { if (typeof pkg.dependencies[key] === 'string' && pkg.dependencies[key].startsWith('workspace:')) { delete pkg.dependencies[key]; } }); } const fs = require('fs'); fs.writeFileSync('../../deploy/package.json', JSON.stringify(pkg, null, 2));"
+        Set-Location ..\..
         
         # Copy web.config
-        cp web.config deploy/
+        Copy-Item -Path web.config -Destination deploy\ -Force
         
         # Install production dependencies for Windows with native builds
-        cd deploy
+        Set-Location deploy
         # Use npm for production to ensure Windows-compatible native modules
         npm install --production --no-optional
-        cd ..
+        Set-Location ..
         
-        echo "Deployment directory prepared"
-        ls -la deploy/
+        Write-Host "Deployment directory prepared"
+        Get-ChildItem -Path deploy\ | Format-Table Name, Length, LastWriteTime
         
         # Verify bcrypt module is present
-        if [ -d "deploy/node_modules/bcrypt" ]; then
-          echo "✓ bcrypt module installed"
-        else
-          echo "✗ WARNING: bcrypt module not found"
-        fi
+        if (Test-Path "deploy\node_modules\bcrypt") {
+          Write-Host "✓ bcrypt module installed" -ForegroundColor Green
+        } else {
+          Write-Host "✗ WARNING: bcrypt module not found" -ForegroundColor Yellow
+        }
         
     - name: Create deployment package
+      shell: powershell
       run: |
         # Package the standalone deployment directory
-        cd deploy
-        zip -r ../web-app.zip . \
-          -x "**/.git/*" \
-          -x "**/*.log"
-        cd ..
+        Compress-Archive -Path deploy\* -DestinationPath web-app.zip -Force
         
-        echo "Deployment package created:"
-        unzip -l web-app.zip | head -20
+        Write-Host "Deployment package created:"
+        Get-Item web-app.zip | Select-Object Name, @{Name="Size(MB)";Expression={[math]::Round($_.Length/1MB, 2)}}
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
