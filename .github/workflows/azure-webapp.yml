@@ -58,14 +58,6 @@ jobs:
       working-directory: apps/api
       run: pnpm build
 
-    - name: Prepare production node_modules
-      run: |
-        # Reinstall with shamefully-hoist to ensure all dependencies are available
-        # Including dev deps to avoid missing transitive dependencies
-        cd apps/api
-        rm -rf node_modules
-        pnpm install --frozen-lockfile --shamefully-hoist
-
     - name: Prepare deployment files
       run: |
         # Verify build output exists
@@ -86,18 +78,22 @@ jobs:
         
     - name: Create deployment package
       run: |
-        # Create deployment package for Windows Azure Web App
+        # Create deployment package with entire workspace structure
+        # pnpm workspaces need the root node_modules for proper dependency resolution
         zip -r web-app.zip \
           web.config \
+          node_modules \
           apps/api/dist \
-          apps/api/node_modules \
           apps/api/package.json \
+          package.json \
           -x "**/.git/*" \
           -x "**/.github/*" \
           -x "**/.turbo/*" \
           -x "**/*.log" \
           -x "**/test/*" \
-          -x "**/*.test.*"
+          -x "**/*.test.*" \
+          -x "**/apps/web/*" \
+          -x "**/packages/*/node_modules/*"
         
         echo "Deployment package created:"
         unzip -l web-app.zip | head -20
