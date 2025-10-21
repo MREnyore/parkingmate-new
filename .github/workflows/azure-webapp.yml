@@ -1,4 +1,4 @@
-name: Production Deploy 
+name: Backend Production Deploy 
 
 on:
   push:
@@ -108,5 +108,5 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         slot-name: 'production'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        publish-profile: ${{ secrets.AZURE_API_STAGING }}
         package: web-app.zip
