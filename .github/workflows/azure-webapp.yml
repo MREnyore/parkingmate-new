@@ -58,9 +58,13 @@ jobs:
       working-directory: apps/api
       run: pnpm build
 
-    - name: Install production dependencies
-      working-directory: apps/api
-      run: pnpm install --prod --frozen-lockfile
+    - name: Prepare production node_modules
+      run: |
+        # Reinstall with shamefully-hoist to ensure all dependencies are available
+        # Including dev deps to avoid missing transitive dependencies
+        cd apps/api
+        rm -rf node_modules
+        pnpm install --frozen-lockfile --shamefully-hoist
 
     - name: Prepare deployment files
       run: |
