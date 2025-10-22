@@ -1,9 +1,5 @@
 {
-  "installCommand": "pnpm install --filter @parkingmate/ui... --prod=false",
   "buildCommand": "pnpm --filter @parkingmate/ui build",
   "outputDirectory": "apps/web/dist",
-  "framework": "vite",
-  "npm": {
-    "packageManager": "pnpm@10.19.0"
-  }
+  "framework": "vite"
 }
