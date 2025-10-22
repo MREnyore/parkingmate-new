@@ -38,12 +38,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
 
-    - name: Install dependencies
+    - name: Install root dependencies
       run: |
-        # First install with workspace root to link local packages
-        pnpm install --no-frozen-lockfile --workspace-root
-        # Then verify with frozen lockfile
-        pnpm install --frozen-lockfile --workspace-root
+        # Install root dependencies first
+        pnpm install --no-frozen-lockfile -w
+        # Then install workspace dependencies
+        pnpm install --no-frozen-lockfile -r --filter "!@parkingmate/typescript-config"
+        # Install typescript-config separately
+        cd packages/typescript-config && pnpm install --no-frozen-lockfile && cd ../..
 
     - name: Generate API client types
       run: pnpm --filter @parkingmate/api-client api:generate
