@@ -29,51 +29,62 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 9.15.0
+    - name: Install dependencies (npm workspaces)
+      run: npm install
 
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+    - name: Generate API types (npm workspace)
+      run: npm --workspace @parkingmate/api run api:generate
 
-    - name: Generate API types
-      run: pnpm --filter @parkingmate/api api:generate
-
-    - name: Build backend API
-      run: pnpm --filter @parkingmate/api build
+    - name: Build backend API (npm workspace)
+      run: npm --workspace @parkingmate/api run build
 
     
 
     - name: Prepare standalone deployment
-      shell: powershell
+      shell: bash
       run: |
         # Create a standalone deployment directory without workspace dependencies
-        New-Item -ItemType Directory -Force -Path deploy | Out-Null
+        mkdir -p deploy
         
         # Copy built files
-        Copy-Item -Path apps\api\dist -Destination deploy\ -Recurse -Force
+        cp -r apps/api/dist deploy/
         
         # Copy openapi.yml file to both locations (root and dist/src for compatibility)
-        Copy-Item -Path apps\api\openapi.yml -Destination deploy\ -Force
-        New-Item -ItemType Directory -Force -Path deploy\dist\src | Out-Null
-        Copy-Item -Path apps\api\openapi.yml -Destination deploy\dist\src\ -Force
+        cp apps/api/openapi.yml deploy/
+        mkdir -p deploy/dist/src
+        cp apps/api/openapi.yml deploy/dist/src/
         
         # Copy and modify package.json to remove workspace dependencies
-        Set-Location apps\api
-        node -e "const pkg = require('./package.json'); delete pkg.devDependencies; if (pkg.dependencies) { Object.keys(pkg.dependencies).forEach(key => { if (typeof pkg.dependencies[key] === 'string' && pkg.dependencies[key].startsWith('workspace:')) { delete pkg.dependencies[key]; } }); } const fs = require('fs'); fs.writeFileSync('../../deploy/package.json', JSON.stringify(pkg, null, 2));"
-        Set-Location ..\..
+        cd apps/api
+        node -e "
+          const pkg = require('./package.json');
+          delete pkg.devDependencies;
+          // Add postinstall script to rebuild bcrypt on Azure
+          pkg.scripts = pkg.scripts || {};
+          pkg.scripts.postinstall = 'npm rebuild bcrypt --build-from-source';
+          // Remove workspace protocol from dependencies
+          if (pkg.dependencies) {
+            Object.keys(pkg.dependencies).forEach(key => {
+              if (typeof pkg.dependencies[key] === 'string' && pkg.dependencies[key].startsWith('workspace:')) {
+                delete pkg.dependencies[key];
+              }
+            });
+          }
+          const fs = require('fs');
+          fs.writeFileSync('../../deploy/package.json', JSON.stringify(pkg, null, 2));
+        "
+        cd ../..
         
         # Copy web.config
-        Copy-Item -Path web.config -Destination deploy\ -Force
+        cp web.config deploy/
         
-        # Install production dependencies
-        Set-Location deploy
+        # Install production dependencies on Windows with native builds
+        cd deploy
         npm install --production --no-optional
-        Set-Location ..
+        cd ..
         
-        Write-Host "Deployment directory prepared"
-        Get-ChildItem -Path deploy\ | Format-Table Name, Length, LastWriteTime
+        echo "Deployment directory prepared"
+        ls -la deploy/
         
     - name: Create deployment package
       shell: powershell
