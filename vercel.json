@@ -1,7 +1,8 @@
 {
   "installCommand": "npm install",
-  "buildCommand": "npm run build --workspace=@parkingmate/api-client && npm run build --workspace=@parkingmate/ui",
+  "buildCommand": "npm run build -w @parkingmate/api-client && npm run build -w @parkingmate/ui",
   "outputDirectory": "apps/web/dist",
+  "ignoreCommand": "exit 0",
   "framework": null,
   "rewrites": [
     {
