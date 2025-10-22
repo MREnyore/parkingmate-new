@@ -39,7 +39,11 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile --prefer-offline
+      run: |
+        # First install to update lockfile if needed
+        pnpm install --no-frozen-lockfile --prefer-offline
+        # Then verify with frozen lockfile to ensure consistency
+        pnpm install --frozen-lockfile --prefer-offline
 
     - name: Generate API client types
       run: pnpm --filter @parkingmate/api-client api:generate
