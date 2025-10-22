@@ -50,7 +50,7 @@ jobs:
     - name: Build frontend only
       run: pnpm --filter @parkingmate/ui build
       env:
-        VITE_API_BASE_URL: https://parkingmate-api.azurewebsites.net/api/v1
+        VITE_API_BASE_URL: https://parkingmate-api-staging.azurewebsites.net/api/v1
         NODE_ENV: production
 
     - name: Verify build output
