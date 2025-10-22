@@ -9,6 +9,11 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# pnpm (not used - project uses npm)
+pnpm-lock.yaml
+pnpm-workspace.yaml
+.pnpm-debug.log*
+
 # Keep package-lock.json for consistent npm builds
 
 # Runtime data
