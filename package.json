@@ -29,13 +29,12 @@
     "turbo": "^2.3.3",
     "typescript": "~5.8.3"
   },
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "pnpm@6.35.1",
   "engines": {
     "node": ">=20.0.0",
-    "pnpm": ">=10.19.0"
+    "pnpm": ">=6.35.1"
   },
   "dependencies": {
-    "@tanstack/react-table": "^8.21.3",
-    "pnpm": "^10.19.0"
+    "@tanstack/react-table": "^8.21.3"
   }
 }
