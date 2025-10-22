@@ -1,5 +1,6 @@
 {
-  "buildCommand": "npm run build --workspace=@parkingmate/ui",
+  "installCommand": "npm install",
+  "buildCommand": "npx turbo run build --filter=@parkingmate/ui...",
   "outputDirectory": "apps/web/dist",
   "framework": "vite"
 }

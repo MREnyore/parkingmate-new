@@ -8,12 +8,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-.pnpm-debug.log*
-pnpm-debug.log*
-package-lock.json
 
-# Keep yarn.lock for consistent frontend builds
-# yarn.lock
+# Keep package-lock.json for consistent npm builds
 
 # Runtime data
 pids
