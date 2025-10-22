@@ -20,41 +20,17 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 9.15.0
+    - name: Install dependencies (npm workspaces)
+      run: npm install
 
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+    - name: Generate API client types (npm workspace)
+      run: npm --workspace @parkingmate/api-client run api:generate
 
-    - name: Setup pnpm cache
-      uses: actions/cache@v4
-      with:
-        path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
+    - name: Build API client package (npm workspace)
+      run: npm --workspace @parkingmate/api-client run build
 
-    - name: Install root dependencies
-      run: |
-        # Install root dependencies first
-        pnpm install --no-frozen-lockfile -w
-        # Then install workspace dependencies
-        pnpm install --no-frozen-lockfile -r --filter "!@parkingmate/typescript-config"
-        # Install typescript-config separately
-        cd packages/typescript-config && pnpm install --no-frozen-lockfile && cd ../..
-
-    - name: Generate API client types
-      run: pnpm --filter @parkingmate/api-client api:generate
-
-    - name: Build API client package
-      run: pnpm --filter @parkingmate/api-client build
-
-    - name: Build frontend only
-      run: pnpm --filter @parkingmate/ui build
+    - name: Build frontend (npm workspace)
+      run: npm --workspace @parkingmate/ui run build
       env:
         VITE_API_BASE_URL: https://parkingmate-api-staging.azurewebsites.net/api/v1
         NODE_ENV: production
