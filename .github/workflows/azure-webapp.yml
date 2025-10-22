@@ -7,8 +7,7 @@ on:
       - 'apps/api/**'
       - 'packages/**'
       - 'package.json'
-      - 'pnpm-workspace.yaml'
-      - 'pnpm-lock.yaml'
+      - 'package-lock.json'
       - 'web.config'
   workflow_dispatch:
 
