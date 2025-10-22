@@ -13,7 +13,7 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "lint:fix:staged": "biome check --fix --unsafe --no-errors-on-unmatched --max-diagnostics=400 --verbose --staged ./**/*.{js,ts,jsx,tsx}",
-    "openapi:generate:build": "pnpm --filter @parkingmate/api-client api:generate && pnpm --filter @parkingmate/api-client build",
+    "openapi:generate:build": "npm run api:generate --workspace=@parkingmate/api-client && npm run build --workspace=@parkingmate/api-client",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean && rm -rf node_modules",
     "db:generate": "dotenv -e .env -- turbo run db:generate",
@@ -29,10 +29,9 @@
     "turbo": "^2.3.3",
     "typescript": "~5.8.3"
   },
-  "packageManager": "pnpm@6.35.1",
   "engines": {
     "node": ">=20.0.0",
-    "pnpm": ">=6.35.1"
+    "npm": ">=10.0.0"
   },
   "dependencies": {
     "@tanstack/react-table": "^8.21.3"
