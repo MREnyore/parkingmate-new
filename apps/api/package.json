@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
-    "@parkingmate/typescript-config": "*",
+    "@parkingmate/typescript-config": "workspace:*",
     "@types/bcryptjs": "^2.4.6",
     "@types/js-yaml": "^4.0.9",
     "@types/jsonwebtoken": "^9.0.10",

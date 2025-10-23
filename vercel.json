@@ -1,5 +1,5 @@
 {
-  "installCommand": "npm install",
+  "installCommand": "npm install --workspaces",
   "buildCommand": "npm run build -w @parkingmate/api-client && npm run build -w @parkingmate/ui",
   "outputDirectory": "apps/web/dist",
   "framework": null,

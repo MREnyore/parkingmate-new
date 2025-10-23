@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
-    "@parkingmate/typescript-config": "*",
+    "@parkingmate/typescript-config": "workspace:*",
     "openapi-typescript": "^7.4.4",
     "typescript": "~5.8.3"
   }
